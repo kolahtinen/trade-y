@@ -1,0 +1,14 @@
+.header {
+    background-color: darkgoldenrod;
+    display: flex;
+    justify-content: space-between;
+    height: 100px;
+    width: 100%;
+}
+
+button {
+    background-color: yellow;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 0 5px;
+}
