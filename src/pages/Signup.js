@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import GlobalStateContext from "../StateContext";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -27,13 +27,13 @@ const Login = () => {
     if (authenticate(password)) {
       login();
     } else {
-        setError('Something went wrong - user was not able to login.')
+        setError('Cannot sign up: The given email is already taken.')
     }
   };
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Sign up</h2>
       <form onSubmit={handleLogin}>
         <div>
           <label>Username:</label>
@@ -51,14 +51,14 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Sign up</button>
         {error && <p>{error}</p>}
-        <Link to="/signup">
-          Don't have an account yet? Sign up here.
+        <Link to="/login">
+          Already have an account? Click here to log in.
         </Link>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Signup;

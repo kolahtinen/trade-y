@@ -1,15 +1,14 @@
-import React, {useContext, useState} from "react";
-import GlobalStateContext from "../StateContext";
-import { Link } from "react-router-dom";
+// Login.js
+
+import React, { useState } from 'react';
 
 const Login = () => {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
     const authenticate = (username, password) => {
-        return true;
+        return false;
     }
 
     const { globalState, setGlobalState } = useContext(GlobalStateContext);
@@ -53,12 +52,9 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
         {error && <p>{error}</p>}
-        <Link to="/signup">
-          Don't have an account yet? Sign up here.
-        </Link>
       </form>
     </div>
   );
-}
+};
 
 export default Login;
