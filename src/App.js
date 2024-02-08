@@ -25,7 +25,11 @@ function App() {
               <Navigate to="/" replace/> : 
               <Login/>}
           />
-          <Route path='/signup'element={<Signup/>}/>
+          <Route 
+            path='/signup'
+            element={globalState.loggedIn ?
+              <Navigate to="/" replace/> :
+              <Signup/>}/>
           <Route path='/sell' element={<Sales/>}/>
         </Routes>        
       </Router>

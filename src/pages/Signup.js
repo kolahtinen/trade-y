@@ -1,8 +1,10 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useRef} from "react";
 import GlobalStateContext from "../StateContext";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
+
+    const { globalState, setGlobalState } = useContext(GlobalStateContext);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,35 +14,45 @@ const Signup = () => {
         return true;
     }
 
-    const { globalState, setGlobalState } = useContext(GlobalStateContext);
-    
-    const login = () => {
+  const signUp = () => {
+
+    if (authenticate(username, password)) {
         setGlobalState((previousState) => ({
             ...previousState,
             loggedIn: true
         }));
-    }
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    if (authenticate(password)) {
-      login();
     } else {
-        setError('Cannot sign up: The given email is already taken.')
+        setError('Cannot sign up with the given credentials.')
     }
   };
+
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (event.target === usernameRef.current) {
+        passwordRef.current.focus();
+      } else if (event.target === passwordRef.current) {
+        usernameRef.current.focus();
+        signUp();
+      }
+    }
+  }
 
   return (
     <div>
       <h2>Sign up</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={signUp}>
         <div>
           <label>Username:</label>
           <input
             type="text"
             value={username}
+            ref={usernameRef}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div>
@@ -48,13 +60,15 @@ const Signup = () => {
           <input
             type="password"
             value={password}
+            ref={passwordRef}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         </div>
-        <button type="submit">Sign up</button>
+        <button type="submit">Login</button>
         {error && <p>{error}</p>}
         <Link to="/login">
-          Already have an account? Click here to log in.
+          Already have an account? Log in here.
         </Link>
       </form>
     </div>

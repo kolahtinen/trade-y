@@ -1,8 +1,10 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useRef} from "react";
 import GlobalStateContext from "../StateContext";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+
+    const { globalState, setGlobalState } = useContext(GlobalStateContext);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,35 +14,45 @@ const Login = () => {
         return true;
     }
 
-    const { globalState, setGlobalState } = useContext(GlobalStateContext);
-    
-    const login = () => {
+  const login = () => {
+
+    if (authenticate(password)) {
         setGlobalState((previousState) => ({
             ...previousState,
             loggedIn: true
         }));
-    }
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    if (authenticate(password)) {
-      login();
     } else {
         setError('Something went wrong - user was not able to login.')
     }
   };
 
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (event.target === usernameRef.current) {
+        passwordRef.current.focus();
+      } else if (event.target === passwordRef.current) {
+        usernameRef.current.focus();
+        login();
+      }
+    }
+  }
+
   return (
     <div>
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={login}>
         <div>
           <label>Username:</label>
           <input
             type="text"
             value={username}
+            ref={usernameRef}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div>
@@ -48,7 +60,9 @@ const Login = () => {
           <input
             type="password"
             value={password}
+            ref={passwordRef}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <button type="submit">Login</button>
